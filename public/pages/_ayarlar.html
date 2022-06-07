@@ -12,15 +12,15 @@
 </head>
 <body>   
     
-     <div class="container d-flex flex-column h-100">
-         <div class="row justify-content-around my-1">
+     <div class="container d-flex flex-column h-100 ">
+         <div class="row justify-content-around my-1 mt-3">
              <h5>Paragraf Ayarları:</h5>
          </div>
          <!-- Font-Size -->
         <div class="row justify-content-around my-2">
             <div class="input-group input-group-sm">
                 <span class="input-group-text col-5" id="inputGroup-sizing-sm">Font Büyüklüğü:</span>
-                <input type="number" id="fontSize" class="form-control col-7 fontSize" aria-label="Sizing " aria-describedby="inputGroup-sizing-sm" min="1.5" max="4" step="0.5" placeholder="1.5vw-4vw">
+                <input type="number" id="fontSize" class="form-control col-7 fontSize" aria-label="Sizing " aria-describedby="inputGroup-sizing-sm" min="4" max="10" step="0.5" placeholder="4vw-10vw">
               </div>
         </div>
         <!-- Font Family Select Mode-->
@@ -39,7 +39,7 @@
         <div class="row justify-content-around my-2 d-none" id="textMode">
             <div class="input-group input-group-sm">
               <span class="input-group-text col-5" id="inputGroup-sizing-sm">Font Ailesi:</span>
-              <input type="text" id="textModeValue" class="form-control" aria-label="Sizing example input"  aria-describedby="inputGroup-sizing-sm">
+              <input type="text" id="textModeValue" class="form-control" aria-label="Sizing example input"  aria-describedby="inputGroup-sizing-sm" value="">
             </div>
         </div> 
         <!-- Open Text Mode -->
@@ -53,13 +53,17 @@
         <div class="row justify-content-around my-2">
             <div class="input-group input-group-sm">
                 <span class="input-group-text col-5" id="inputGroup-sizing-sm">Font Rengi:</span>
-                <input type="color" class="form-control form-control-color col-7" id="exampleColorInput" value="#563d7c" title="Choose your color">
+                <input type="color" class="form-control form-control-color col-7" id="exampleColorInput" value="#000000" title="Choose your color">
             </div>
         </div> 
         <!-- kaydet -->
         <div class="row justify-content-start mt-2">
-            <button class="btn btn-primary col-3 ms-3" onclick="paragraphSettingsSave()"> Kaydet</button>
-        </div>       
+            <button class="btn btn-primary col-3 ms-3" onclick="SettingsSave()"> Kaydet</button>
+            <button class="btn btn-primary col-3 ms-3" onclick="preview()">Önizle</button>
+        </div>   
+        <div class="row justify-content-start mt-2 view">
+            <div class="d-none">Önizle</div>
+        </div> 
       
 </div> 
 </body>

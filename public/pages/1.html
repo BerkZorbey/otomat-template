@@ -14,15 +14,14 @@
     
      <div class="container d-flex flex-column justify-content-evenly h-100">
         <div class="row mb-4 mx-3 mt-5 ">
-            
+            <div class="col-sm-8 col-md-6 " ondblclick="openChangeImage('image')">
+                <img src="" class="image">
+            </div>
             <div class="sablon2-p col-sm-4 col-md-6" ondblclick="openEditor()">
-
-            </div>
-            <div class="col-sm-8 col-md-6">
-                <img src="../img/yol.png">
+                
             </div>
             
-            <button class="btn btn-primary col-2 mt-2 save me-2" onclick="kaydet()">Kaydet</button>
+            <button class="btn btn-primary offset-6 col-2 mt-2 save me-3" onclick="kaydet()">Kaydet</button>
             <button class="btn btn-secondary col-2 mt-2 setting ms-2" onclick="openSetting()">Ayarlar</button>
         </div>
         <div class="row justify-content-around my-5">
@@ -35,8 +34,9 @@
 </body>
 </html>
 <script src="../assets/bootstrap.bundle.min.js"></script>
-
 <script src="../scripts/main.js"></script>
+
+
 
 
 

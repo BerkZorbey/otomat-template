@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const database = require('./init');
  
-const paragraphSettings = database.define('paragraphSetting', {
+const paragraph_setting = database.define('p_settings', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -26,4 +26,4 @@ const paragraphSettings = database.define('paragraphSetting', {
     
 })
  
-module.exports = paragraphSettings;
+module.exports = paragraph_setting;

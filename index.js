@@ -1,9 +1,9 @@
 const { app, BrowserWindow,Menu,ipcMain} = require('electron')
-const {createPage, renamePagesAfterDeleteProcess, deletePage, getPrompt,wrongPage} = require('./functions')
-
+const {createPage, renamePagesAfterDeleteProcess, deletePage, getPrompt,wrongPage,changeImage,saveFile,openSavedFile,newFile} = require('./functions')
 const path = require('path')
 
 var labelname;
+
 
 
 function createWindow () {
@@ -11,6 +11,7 @@ function createWindow () {
     width: 800,
     height: 600,
     transparent: true,
+    autoHideMenuBar:true,
     webPreferences: {
       nodeIntegration: true, 
       contextIsolation: false,
@@ -18,13 +19,14 @@ function createWindow () {
       preload:path.join(__dirname,'public','scripts','upload.js'),
     }
   })
-  function createChild(){
+ global.createChild = function createChild(data){
     const child = new BrowserWindow({ 
-    width: 400,
-    height: 300,
+    width: 600,
+    height: 350,
     parent: win,
     modal:true,
     resizable:false,
+    frame:false,
     webPreferences: {
       nodeIntegration: true, 
       contextIsolation: false,
@@ -33,11 +35,16 @@ function createWindow () {
     }
     })
     child.loadFile('./public/pages/_ayarlar.html');
-    
+    child.webContents.on('did-finish-load',()=>{
+      child.webContents.send('child:path',data);
+    });
+    child.on('closed',()=>{
+     setTimeout(()=>{
+       global.refresh()
+     },1000) });
   }
-
   
-  win.loadFile('./public/pages/1.html');
+  win.loadFile('./public/pages/index.html');
   
  
   //Sayfayı yeniler.
@@ -66,6 +73,9 @@ function createWindow () {
         ));
     } 
   }
+  global.openMainWindow = function openMainWindow(){
+    win.loadFile('./public/pages/index.html');
+  }
 
   
   //Front-end tarafından bilgi alır.
@@ -74,10 +84,12 @@ function createWindow () {
    
   });
   ipcMain.on('setting',(err,data)=>{
-    createChild(); 
-    win.webContents.send('child:path',data);
+    global.createChild(data); 
+    
   });
-  
+  ipcMain.on('open:changeImage',((err,data)=>{
+    changeImage(data);
+  }))
  
   const mainmenu = Menu.buildFromTemplate(Mainmenutemplate);
   Menu.setApplicationMenu(mainmenu);
@@ -85,11 +97,41 @@ function createWindow () {
 }
 
 const Mainmenutemplate = [
-    {
-        label:"Şablon",
+    
+  { 
+    label:"Dosya",
+      submenu:[
+        {
+          label:"Yeni",
+          click(){  
+            newFile();    
+          },
+           
+        },
+        {
+          label:"Aç",
+          click(){
+            openSavedFile();      
+          },
+           
+        },
+        {
+            label:"Kaydet",
+            click(){
+            saveFile();       
+            },
+              
+          },
+            
+      ],    
+  },
+  
+  {
+        label:"Şablon oluştur",
         submenu:[
             {
-                label:"sablon1",
+                label:"Şablon - 1",
+                icon:'./icon/sablon1@5x.png',
                 click(){
                     labelname="1";
                     createPage(labelname);
@@ -98,28 +140,32 @@ const Mainmenutemplate = [
                  
                 },
             {
-                label:"sablon2",
+              label:"Şablon - 2",
+              icon:'./icon/sablon2@5x.png',
                 click(){
                      labelname="2";
                      createPage(labelname);      
                 }
             },
             {
-                label:"sablon3",
+              label:"Şablon - 3",
+              icon:'./icon/sablon3@5x.png',
                 click(){
                     labelname="3";
                     createPage(labelname);      
                }
             },
             {
-                label:"sablon4",
+              label:"Şablon - 4",
+              icon:'./icon/sablon4@5x.png',
                 click(){
                     labelname="4";
                     createPage(labelname);      
                }
             },
             {
-                label:"sablon5",
+              label:"Şablon - 5",
+              icon:'./icon/sablon5@5x.png',
                 click(){
                     labelname="5";
                     createPage(labelname);      
@@ -131,10 +177,16 @@ const Mainmenutemplate = [
     { 
       label:"Değiştir",
         submenu:[
-            {
+              {
                 label:"Paragraf özelliklerini değiştir.",
                 click(){
-                    
+                  global.createChild(global.pathOfFile);       
+                },
+              },
+              {
+                label:"Arka plan resmini değiştir",
+                click(){
+                  changeImage('bg-image'); 
                       
                 },
                  
@@ -189,10 +241,6 @@ const Mainmenutemplate = [
     {
       label:'Seçenekler',
       submenu:[
-        {
-          label:"DevTool",
-          role:"toggleDevTools"
-        },
         {
           label:"Sayfayı Yenile",
           role:"reload"

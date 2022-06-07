@@ -3,8 +3,10 @@ const { ipcRenderer} = electron;
 const path = require('path');
 const fs = require('fs');
 
-const paragraphSetting = require('../database/paragraphSetting');
+const paragraph_setting = require('../database/p_settings');
 const pagesContent = require('../database/pagesContent');
+const imagePath = require('../database/imagePath');
+const savedLocation = require('../database/savedLocation');
 const {addPagesContent}=require('../scripts/p_crud');
 
 
@@ -13,15 +15,17 @@ const filePath=path.basename(window.location.href,'.html');
 
 
 window.addEventListener('load',(event) => {
+  ipcRenderer.send("way",window.location.href);
   databaseSync();
   buttonDisplay(); 
-  ipcRenderer.send("way",window.location.href);
   
 });
 
 async function databaseSync(){
   await pagesContent.sync();
-  await paragraphSetting.sync();
+  await paragraph_setting.sync();
+  await imagePath.sync();
+  await savedLocation.sync();
 }
 
 
@@ -55,8 +59,13 @@ function openSetting(){
   
 }
 
+function openChangeImage(value){
+  
+  let imgClassName = value;
+  ipcRenderer.send('open:changeImage',imgClassName);
+}
 
-   
+
 
 function buttonDisplay(){
   //Seçilen sayfa ana sayfa ise geri tuşunu gösterme 
@@ -102,6 +111,7 @@ module.exports={
   geri,
   openEditor,
   openSetting,
+  openChangeImage
 }
 
    
