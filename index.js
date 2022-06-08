@@ -1,5 +1,5 @@
 const { app, BrowserWindow,Menu,ipcMain} = require('electron')
-const {createPage, renamePagesAfterDeleteProcess, deletePage, getPrompt,wrongPage,changeImage,saveFile,openSavedFile,newFile} = require('./functions')
+const {createPage, renamePagesAfterDeleteProcess, deletePage, getPrompt,wrongPage,changeImage,saveFile,openSavedFile,newFile,saveAsFile} = require('./functions')
 const path = require('path')
 
 var labelname;
@@ -122,7 +122,13 @@ const Mainmenutemplate = [
             },
               
           },
-            
+          {
+            label:"Farklı Kaydet",
+            click(){
+            saveAsFile();       
+            },
+              
+          },  
       ],    
   },
   

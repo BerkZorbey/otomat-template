@@ -4,59 +4,30 @@
     <meta charset="UTF-8">
     <title>Otomat Şablon Uygulaması - Taha Berk Yeşilalioğlu</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="../assets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/styles.css">
-    
+
 
 </head>
 <body>   
     
      <div class="container d-flex flex-column justify-content-evenly h-100">
         <div class="row mb-4 mx-3 mt-5">
-            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active" >
-                        <img src="https://via.placeholder.com/100" class="careousel-image-1" alt="..." ondblclick="openChangeImage('careousel-image-1')">
-                    </div>
-                    <div class="carousel-item" >
-                        <img src="https://via.placeholder.com/200" class="careousel-image-2" alt="..." ondblclick="openChangeImage('careousel-image-2')">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://via.placeholder.com/300" class="careousel-image-3" alt="..." ondblclick="openChangeImage('careousel-image-3')">
-                    </div>
-                    </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+            <video class="sablon5" ondblclick="openChangeImage('video')" controls autoplay>
+                
+            </video>
         </div>
         <div class="row justify-content-around my-5">
             <button class="btn btn-primary py-2 col-3 ms-2 me-2 gerı"  onclick="geri()">Geri</button>
             <button class="btn btn-primary py-2  col-3 me-2 ms-2" onclick="window.open('../pages/index.html','_self')">Anasayfa</button>
             <button class="btn btn-primary col-3 py-2 ılerı ms-2 me-2"  onclick="ileri()">İleri</button>
         </div>
+    </div>
+    
       
 </div> 
 </body>
 </html>
 <script src="../assets/bootstrap.bundle.min.js"></script>
+
 <script src="../scripts/main.js"></script>
-
-
-
-
-
-
-        

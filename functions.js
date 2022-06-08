@@ -14,7 +14,7 @@ const savedLocation = require('./public/database/savedLocation');
 const {deleteContent}=require('./public/scripts/p_crud');
 
 const {addPagesImage,deleteImage}=require('./public/scripts/img_crud');
-const desktopDir = path.join(os.homedir(), "Documents");
+const documentdir = path.join(os.homedir(), "Documents");
 
 //alert ayarları
 let wrong = {
@@ -393,7 +393,7 @@ function openSavedFile(){
         startValue();
         dialog.showOpenDialog({
             properties:['openDirectory'],
-            defaultPath:`${path.join(desktopDir,'electron_otomat')}`,
+            defaultPath:`${path.join(documentdir,'electron_otomat')}`,
             
         }).then((result)=>{
             global.saveFilePath=result.filePaths;
@@ -478,11 +478,11 @@ function saveFile(){
 }
 //electron_otomotat dosyasının içine belirtilen isimle dosyaları kaydet
 function addFile(){ 
-    fs.mkdir(`${desktopDir}/electron_otomat`,{ recursive: true }, (err) => {
+    fs.mkdir(`${documentdir}/electron_otomat`,{ recursive: true }, (err) => {
         console.log(err);
     });
     dialog.showSaveDialog({
-        defaultPath:`${path.join(desktopDir,'electron_otomat')}`,
+        defaultPath:`${path.join(documentdir,'electron_otomat')}`,
         
     }
     ).then((result)=>{
@@ -671,6 +671,131 @@ function updateFile(){
 }
 
 
+function saveAsFile(){ 
+    dialog.showSaveDialog({
+        defaultPath:`${path.join(documentdir,'electron_otomat')}`,
+        
+    }
+    ).then(async(result)=>{
+        if(result.filePath !== ''){ 
+         fs.mkdir(`${result.filePath}`,{ recursive: true }, (err) => {
+            console.log(err);
+        }); 
+        //pages
+        fs.readdir(path.join(__dirname,`./public/pages`), (err, files) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            fs.mkdir(`${result.filePath}/pages`,{ recursive: true }, (err) => {
+                console.log(err);
+            }); 
+            files.forEach(file => {
+                if(file !== '_ayarlar.html' && file !== '_sablonSetting.html'){
+                readStream = fs.createReadStream(path.join(__dirname,`./public/pages/${file}`),'utf-8');
+                writeStream =fs.createWriteStream(`${result.filePath}/pages/${file}`);
+                readStream.pipe(writeStream);
+            }
+          }); 
+        
+    })
+        //img
+        fs.readdir(path.join(__dirname,`./public/img`), (err, files) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            fs.mkdir(`${result.filePath}/img`,{ recursive: true }, (err) => {
+                console.log(err);
+            }); 
+            files.forEach(file => {
+                var encodeFile = path.join(__dirname,`./public/img/${file}`);
+                var decodeFile = `${result.filePath}/img/${file}`   
+                var base64str = base64_encode(encodeFile);
+                base64_decode(base64str, decodeFile);
+                
+            
+          }); 
+        
+    })
+    //video
+    fs.readdir(path.join(__dirname,`./public/video`), (err, files) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        fs.mkdir(`${result.filePath}/video`,{ recursive: true }, (err) => {
+            console.log(err);
+        }); 
+        files.forEach(file => {
+            var encodeFile = path.join(__dirname,`./public/video/${file}`);
+            var decodeFile = `${result.filePath}/video/${file}`   
+            var base64str = base64_encode(encodeFile);
+            base64_decode(base64str, decodeFile);
+            
+        
+      }); 
+    
+})
+       //database
+        fs.mkdir(`${result.filePath}/database`,{ recursive: true }, (err) => {
+            console.log(err);
+        });
+        // p_settings  
+        const p_settings_csv = fs.createWriteStream(`${result.filePath}\\database\\p_settings.csv`);
+        await paragraph_setting.findAll()
+        .then((res)=>{
+            const jsondata = JSON.parse(JSON.stringify(res));
+            fastcsv.write(jsondata,{headers:true})
+            .on('finish',()=>{
+                console.log("P_settings export successfully");
+            })
+            .pipe(p_settings_csv);
+        }).catch(err=>console.log(err));
+        //images
+        const images_csv = fs.createWriteStream(`${result.filePath}\\database\\images.csv`);
+        await imagePath.findAll()
+        .then((res)=>{
+            const jsondata = JSON.parse(JSON.stringify(res));
+            fastcsv.write(jsondata,{headers:true})
+            .on('finish',()=>{
+                console.log("Images export successfully");
+            })
+            .pipe(images_csv);
+        }).catch(err=>console.log(err));
+        //pages
+        const pages_csv = fs.createWriteStream(`${result.filePath}\\database\\pages.csv`);
+        await pagesContent.findAll()
+        .then((res)=>{
+            const jsondata = JSON.parse(JSON.stringify(res));
+            fastcsv.write(jsondata,{headers:true})
+            .on('finish',()=>{
+                console.log("Pages export successfully");
+            })
+            .pipe(pages_csv);
+        }).catch(err=>console.log(err));
+        //location
+        const location_csv = fs.createWriteStream(`${result.filePath}\\database\\location.csv`);
+        await savedLocation.findAll()
+        .then((res)=>{
+            res[0].dataValues.savedPath = result.filePath;
+            const jsondata = JSON.parse(JSON.stringify(res));
+            fastcsv.write(jsondata,{headers:true})
+            .on('finish',()=>{
+                console.log("Location export successfully");
+            })
+            .pipe(location_csv);
+        }).catch(err=>console.log(err));
+
+
+
+        }
+        
+}).catch(err=>console.log(err));
+   
+}
+
+
 
 
 
@@ -781,5 +906,6 @@ module.exports = {
     changeImage,
     saveFile,
     openSavedFile,
-    newFile
+    newFile,
+    saveAsFile
 }
