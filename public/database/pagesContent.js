@@ -1,5 +1,6 @@
-const Sequelize = require('sequelize');
-const database = require('./init');
+const {Sequelize} = require('sequelize');
+const path =require('path');
+const database = require(path.join(__dirname,'.','init'));
  
 const pagesContent = database.define('pages', {
     id: {

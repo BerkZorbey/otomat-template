@@ -1,5 +1,5 @@
-const pagesContent = require('../database/pagesContent');
 const path = require('path');
+const pagesContent = require(path.join(__dirname,'..','database','pagesContent'));
 
 async function uploadcontent(){
     var pageName = `${path.basename(window.location.href,'.html')}`;

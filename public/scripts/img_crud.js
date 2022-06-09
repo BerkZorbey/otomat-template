@@ -1,7 +1,7 @@
 
-const imagePath = require('../database/imagePath');
-const path = require('path');
 
+const path = require('path');
+const imagePath = require(path.join(__dirname,'..','database','imagePath'));
 async function uploadImage(){
     var pageName = `${path.basename(window.location.href,'.html')}`;
     

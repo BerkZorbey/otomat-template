@@ -2,12 +2,11 @@ const electron = require('electron');
 const { ipcRenderer} = electron;
 const path = require('path');
 const fs = require('fs');
-
-const paragraph_setting = require('../database/p_settings');
-const pagesContent = require('../database/pagesContent');
-const imagePath = require('../database/imagePath');
-const savedLocation = require('../database/savedLocation');
-const {addPagesContent}=require('../scripts/p_crud');
+const paragraph_setting = require(path.join(__dirname,'..','database','p_settings'));
+const pagesContent = require(path.join(__dirname,'..','database','pagesContent'));
+const imagePath = require(path.join(__dirname,'..','database','imagePath'));
+const savedLocation = require(path.join(__dirname,'..','database','savedLocation'));
+const {addPagesContent}=require(path.join(__dirname,'..','scripts','p_crud'));
 
 
 const filePath=path.basename(window.location.href,'.html');
@@ -19,6 +18,7 @@ window.addEventListener('load',(event) => {
   databaseSync();
   buttonDisplay(); 
   
+
 });
 
 async function databaseSync(){
@@ -99,6 +99,10 @@ function kaydet(){
   document.querySelector(".save").style.visibility = "hidden"; 
   document.querySelector(".setting").style.visibility = "hidden";
 }
+
+
+
+
 
 
     

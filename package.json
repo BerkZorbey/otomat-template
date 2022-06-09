@@ -1,26 +1,28 @@
 {
   "name": "otomat-template",
-  "productName":"Electron Otomat Template",
+  "productName": "Electron Otomat Template",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
     "start": "electron .",
+    "rebuild": "electron-rebuild -w -f sequelize",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Taha Berk Yeşilalioğlu",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^18.2.0",
-    "electron-packager": "^15.5.1"
+    "electron": "^19.0.4",
+    "electron-packager": "^15.5.1",
+    "electron-rebuild": "^3.2.7"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.8",
     "del": "^6.1.1",
     "electron-alert": "^0.1.20",
     "electron-prompt": "^1.7.0",
     "fast-csv": "^4.3.6",
+    "node-gyp": "^9.0.0",
     "sequelize": "^6.20.0",
     "sqlite3": "^5.0.8"
   }

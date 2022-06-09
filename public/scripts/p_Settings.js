@@ -1,5 +1,6 @@
 const { ipcRenderer} = require("electron");
-const paragraph_setting = require('../database/p_settings'); 
+const path = require('path');
+const paragraph_setting = require(path.join(__dirname,'..','database','p_settings')); 
 
 
 

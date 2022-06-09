@@ -1,24 +1,24 @@
-const { app, BrowserWindow,Menu,ipcMain} = require('electron')
-const {createPage, renamePagesAfterDeleteProcess, deletePage, getPrompt,wrongPage,changeImage,saveFile,openSavedFile,newFile,saveAsFile} = require('./functions')
-const path = require('path')
+const { app, BrowserWindow,ipcMain, Menu} = require('electron');
+const {createPage, renamePagesAfterDeleteProcess, deletePage, getPrompt,wrongPage,changeImage,saveFile,openSavedFile,newFile,saveAsFile} = require('./functions');
+const path = require('path');
 
 var labelname;
 
 
 
-function createWindow () {
+function createWindow (MainTemplate) {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    transparent: true,
-    autoHideMenuBar:true,
     webPreferences: {
       nodeIntegration: true, 
       contextIsolation: false,
       enableRemoteModule: true,
       preload:path.join(__dirname,'public','scripts','upload.js'),
     }
+    
   })
+  win.setMenu(null);
  global.createChild = function createChild(data){
     const child = new BrowserWindow({ 
     width: 600,
@@ -45,7 +45,7 @@ function createWindow () {
   }
   
   win.loadFile('./public/pages/index.html');
-  
+
  
   //Sayfayı yeniler.
   global.refresh = function refresh(){
@@ -74,7 +74,7 @@ function createWindow () {
     } 
   }
   global.openMainWindow = function openMainWindow(){
-    win.loadFile('./public/pages/index.html');
+    win.loadURL(path.join(__dirname,'./public/pages/index.html'));
   }
 
   
@@ -90,88 +90,83 @@ function createWindow () {
   ipcMain.on('open:changeImage',((err,data)=>{
     changeImage(data);
   }))
- 
-  const mainmenu = Menu.buildFromTemplate(Mainmenutemplate);
-  Menu.setApplicationMenu(mainmenu);
-  
-}
-
-const Mainmenutemplate = [
-    
-  { 
-    label:"Dosya",
+  Menu.setApplicationMenu(Menu.buildFromTemplate(MainTemplate));
+}  
+const MainTemplate = [ 
+{ 
+    label: 'Dosya',
       submenu:[
         {
-          label:"Yeni",
+          label: 'Yeni',
           click(){  
             newFile();    
-          },
+          }
            
         },
         {
-          label:"Aç",
+          label: 'Aç',
           click(){
             openSavedFile();      
-          },
+          }
            
         },
         {
-            label:"Kaydet",
+            label: 'Kaydet',
             click(){
             saveFile();       
-            },
+            }
               
           },
           {
-            label:"Farklı Kaydet",
+            label: 'Farklı Kaydet',
             click(){
             saveAsFile();       
-            },
+            }
               
           },  
       ],    
   },
   
-  {
-        label:"Şablon oluştur",
+   {
+        label: 'Sablon Olustur',
         submenu:[
             {
-                label:"Şablon - 1",
-                icon:'./icon/sablon1@5x.png',
+                label: 'Sablon - 1',
+                icon: path.join(__dirname,'./icon/sablon1@5x.png'),
                 click(){
                     labelname="1";
                     createPage(labelname);
                       
-                },
+                }
                  
                 },
             {
-              label:"Şablon - 2",
-              icon:'./icon/sablon2@5x.png',
+              label: 'sablon - 2',
+              icon: path.join(__dirname,'./icon/sablon2@5x.png'),
                 click(){
                      labelname="2";
                      createPage(labelname);      
                 }
             },
             {
-              label:"Şablon - 3",
-              icon:'./icon/sablon3@5x.png',
+              label: 'sablon - 3',
+              icon: path.join(__dirname,'./icon/sablon3@5x.png'),
                 click(){
                     labelname="3";
                     createPage(labelname);      
                }
             },
             {
-              label:"Şablon - 4",
-              icon:'./icon/sablon4@5x.png',
+              label: 'sablon - 4',
+              icon: path.join(__dirname,'./icon/sablon4@5x.png'),
                 click(){
                     labelname="4";
                     createPage(labelname);      
                }
             },
             {
-              label:"Şablon - 5",
-              icon:'./icon/sablon5@5x.png',
+              label: 'sablon - 5',
+              icon: path.join(__dirname,'./icon/sablon5@5x.png'),
                 click(){
                     labelname="5";
                     createPage(labelname);      
@@ -179,31 +174,31 @@ const Mainmenutemplate = [
             },
             
         ],
-    },
+    }, 
     { 
-      label:"Değiştir",
+      label: 'Degistir',
         submenu:[
               {
-                label:"Paragraf özelliklerini değiştir.",
+                label:'Paragraf özelliklerini degistir.',
                 click(){
                   global.createChild(global.pathOfFile);       
-                },
+                }
               },
               {
-                label:"Arka plan resmini değiştir",
+                label:'Arka plan resmini degistir',
                 click(){
                   changeImage('bg-image'); 
                       
-                },
+                }
                  
               },
         ],    
     },
-    {
-        label:"Sil",
+     {
+        label: 'Sil',
         submenu:[
             {
-              label:"Anasayfayı değiştir",
+              label: 'Anasayfayı degistir',
               click(){
               if(global.pathOfFile === 'index') {
                 deletePage();
@@ -216,7 +211,7 @@ const Mainmenutemplate = [
             }
           },
             {
-                label:"Sayfayı tamamen sil",
+                label: 'Sayfayı tamamen sil',
                 click(){
                   if(global.pathOfFile !== 'index'){
                     deletePage();
@@ -226,10 +221,10 @@ const Mainmenutemplate = [
                   else{
                     wrongPage();
                   }
-                },
+                }
               },
               {
-                label:"Sayfayı sil ve yerine başka bir şablon koy",
+                label: 'Sayfayı sil ve yerine başka bir sablon koy',
                 click(){
                 if(global.pathOfFile !== 'index'){
                   deletePage();
@@ -245,26 +240,31 @@ const Mainmenutemplate = [
         ]
     },
     {
-      label:'Seçenekler',
+      label: 'Secenekler',
       submenu:[
+        
         {
-          label:"Sayfayı Yenile",
-          role:"reload"
+          label: 'Sayfayı Yenile',
+          role: "reload"
         },
         {
-          label:"Ekranı büyüt",
-          role:"togglefullscreen"
+          label: 'Ekranı buyut',
+          role: "togglefullscreen"
         }
       ]
-    }   
-]
+    }     
+] 
+
 
 app.whenReady().then(() => {
-  createWindow()
-
+  createWindow(MainTemplate);
+  
+  
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+      createWindow();
+
+  
     }
   })
 })

@@ -672,6 +672,9 @@ function updateFile(){
 
 
 function saveAsFile(){ 
+    fs.mkdir(`${documentdir}/electron_otomat`,{ recursive: true }, (err) => {
+        console.log(err);
+    });
     dialog.showSaveDialog({
         defaultPath:`${path.join(documentdir,'electron_otomat')}`,
         
